@@ -90,10 +90,25 @@ def find_json_object(text: str) -> str | None:
 
     This handles nested objects correctly, unlike simple regex like r'\\{[^{}]*\\}'.
     """
+    import json
+
     start = text.find("{")
     if start == -1:
         return None
 
+    end = text.rfind("}")
+    if end == -1 or end < start:
+        return None
+
+    # Fast path: try json.loads directly (C extension, handles 1MB in ~14ms)
+    try:
+        candidate = text[start : end + 1]
+        json.loads(candidate)
+        return candidate
+    except json.JSONDecodeError:
+        pass
+
+    # Fall back to existing brace matching
     depth = 0
     in_string = False
     escape_next = False
