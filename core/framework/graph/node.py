@@ -16,6 +16,7 @@ Protocol:
 """
 
 import asyncio
+import json
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -90,8 +91,6 @@ def find_json_object(text: str) -> str | None:
 
     This handles nested objects correctly, unlike simple regex like r'\\{[^{}]*\\}'.
     """
-    import json
-
     start = text.find("{")
     if start == -1:
         return None

@@ -279,7 +279,7 @@ class TestAdversarial:
         # which may not be valid JSON.  The key contract: no crash.
         raw = '{] then [} but finally {"valid": 1}'
         result = find_json_object(raw)
-        assert result is not None or result is None  # no crash
+        assert isinstance(result, (str, type(None)))  # no crash
 
     def test_invalid_json_then_valid(self):
         # The brace-depth fallback returns the first balanced pair,
